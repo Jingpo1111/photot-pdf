@@ -1,62 +1,108 @@
 
-const fileInput = document.getElementById("fileInput");
-const dropZone = document.getElementById("dropZone");
-const photoGrid = document.getElementById("photoGrid");
-const photoCount = document.getElementById("photoCount");
-const emptyState = document.getElementById("emptyState");
+const fileInput =
+    document.getElementById("fileInput");
 
-const clearAll = document.getElementById("clearAll");
-const generatePDF = document.getElementById("generatePDF");
+const dropZone =
+    document.getElementById("dropZone");
 
-const pageSize = document.getElementById("pageSize");
-const orientation = document.getElementById("orientation");
-const margin = document.getElementById("margin");
+const photoGrid =
+    document.getElementById("photoGrid");
+
+const photoCount =
+    document.getElementById("photoCount");
+
+const emptyState =
+    document.getElementById("emptyState");
+
+const clearAll =
+    document.getElementById("clearAll");
+
+const generatePDF =
+    document.getElementById("generatePDF");
+
+const savePDF =
+    document.getElementById("savePDF");
+
+const pageSize =
+    document.getElementById("pageSize");
+
+const orientation =
+    document.getElementById("orientation");
+
+const margin =
+    document.getElementById("margin");
+
+const fileName =
+    document.getElementById("fileName");
+
 
 let photos = [];
+
+let generatedPDF = null;
 
 
 /* =========================
    FILE UPLOAD
 ========================= */
 
-fileInput.addEventListener("change", function () {
+fileInput.addEventListener(
+    "change",
+    function () {
 
-    addFiles(this.files);
+        addFiles(this.files);
 
-    this.value = "";
+        this.value = "";
 
-});
+    }
+);
 
 
 /* =========================
    DRAG & DROP
 ========================= */
 
-dropZone.addEventListener("dragover", function (e) {
+dropZone.addEventListener(
+    "dragover",
+    function (e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    dropZone.classList.add("dragover");
+        dropZone.classList.add(
+            "dragover"
+        );
 
-});
-
-
-dropZone.addEventListener("dragleave", function () {
-
-    dropZone.classList.remove("dragover");
-
-});
+    }
+);
 
 
-dropZone.addEventListener("drop", function (e) {
+dropZone.addEventListener(
+    "dragleave",
+    function () {
 
-    e.preventDefault();
+        dropZone.classList.remove(
+            "dragover"
+        );
 
-    dropZone.classList.remove("dragover");
+    }
+);
 
-    addFiles(e.dataTransfer.files);
 
-});
+dropZone.addEventListener(
+    "drop",
+    function (e) {
+
+        e.preventDefault();
+
+        dropZone.classList.remove(
+            "dragover"
+        );
+
+        addFiles(
+            e.dataTransfer.files
+        );
+
+    }
+);
 
 
 /* =========================
@@ -65,29 +111,45 @@ dropZone.addEventListener("drop", function (e) {
 
 function addFiles(files) {
 
-    Array.from(files).forEach(file => {
+    Array.from(files).forEach(
+        file => {
 
-        if (!file.type.startsWith("image/")) {
-            return;
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function (e) {
+
+                    photos.push({
+
+                        src: e.target.result,
+
+                        rotation: 0,
+
+                        name: file.name
+
+                    });
+
+
+                    renderPhotos();
+
+                };
+
+
+            reader.readAsDataURL(file);
+
         }
-
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-
-            photos.push({
-                src: e.target.result,
-                rotation: 0,
-                name: file.name
-            });
-
-            renderPhotos();
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
+    );
 
 }
 
@@ -100,109 +162,195 @@ function renderPhotos() {
 
     photoGrid.innerHTML = "";
 
-    photoCount.textContent = photos.length;
+    photoCount.textContent =
+        photos.length;
+
 
     if (photos.length === 0) {
 
-        photoGrid.appendChild(emptyState);
+        photoGrid.appendChild(
+            emptyState
+        );
 
-        generatePDF.disabled = true;
+        generatePDF.disabled =
+            true;
+
+        savePDF.disabled =
+            true;
+
+        generatedPDF = null;
 
         return;
 
     }
 
-    generatePDF.disabled = false;
+
+    generatePDF.disabled =
+        false;
 
 
-    photos.forEach((photo, index) => {
+    photos.forEach(
+        (photo, index) => {
 
-        const card = document.createElement("div");
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-        card.className = "photo-card";
-
-
-        const number = document.createElement("div");
-
-        number.className = "photo-number";
-
-        number.textContent = index + 1;
+            card.className =
+                "photo-card";
 
 
-        const img = document.createElement("img");
+            const number =
+                document.createElement(
+                    "div"
+                );
 
-        img.src = photo.src;
+            number.className =
+                "photo-number";
 
-        img.style.transform =
-            `rotate(${ photo.rotation }deg)`;
-
-
-        const actions = document.createElement("div");
-
-        actions.className = "photo-actions";
-
-
-        const leftButton = document.createElement("button");
-
-        leftButton.textContent = "←";
-
-        leftButton.title = "Move left";
-
-        leftButton.onclick = () =>
-            movePhoto(index, -1);
+            number.textContent =
+                index + 1;
 
 
-        const rotateButton = document.createElement("button");
+            const img =
+                document.createElement(
+                    "img"
+                );
 
-        rotateButton.textContent = "↻";
+            img.src =
+                photo.src;
 
-        rotateButton.title = "Rotate";
-
-        rotateButton.onclick = () =>
-            rotatePhoto(index);
-
-
-        const rightButton = document.createElement("button");
-
-        rightButton.textContent = "→";
-
-        rightButton.title = "Move right";
-
-        rightButton.onclick = () =>
-            movePhoto(index, 1);
+            img.style.transform =
+                `rotate(${photo.rotation}deg)`;
 
 
-        const deleteButton = document.createElement("button");
+            const actions =
+                document.createElement(
+                    "div"
+                );
 
-        deleteButton.textContent = "🗑";
-
-        deleteButton.className = "delete";
-
-        deleteButton.title = "Delete";
-
-        deleteButton.onclick = () =>
-            deletePhoto(index);
+            actions.className =
+                "photo-actions";
 
 
-        actions.appendChild(leftButton);
+            /* MOVE LEFT */
 
-        actions.appendChild(rotateButton);
+            const leftButton =
+                document.createElement(
+                    "button"
+                );
 
-        actions.appendChild(rightButton);
+            leftButton.textContent =
+                "←";
 
-        actions.appendChild(deleteButton);
+            leftButton.title =
+                "Move left";
+
+            leftButton.onclick =
+                () => movePhoto(
+                    index,
+                    -1
+                );
 
 
-        card.appendChild(number);
+            /* ROTATE */
 
-        card.appendChild(img);
+            const rotateButton =
+                document.createElement(
+                    "button"
+                );
 
-        card.appendChild(actions);
+            rotateButton.textContent =
+                "↻";
+
+            rotateButton.title =
+                "Rotate";
+
+            rotateButton.onclick =
+                () => rotatePhoto(
+                    index
+                );
 
 
-        photoGrid.appendChild(card);
+            /* MOVE RIGHT */
 
-    });
+            const rightButton =
+                document.createElement(
+                    "button"
+                );
+
+            rightButton.textContent =
+                "→";
+
+            rightButton.title =
+                "Move right";
+
+            rightButton.onclick =
+                () => movePhoto(
+                    index,
+                    1
+                );
+
+
+            /* DELETE */
+
+            const deleteButton =
+                document.createElement(
+                    "button"
+                );
+
+            deleteButton.textContent =
+                "🗑";
+
+            deleteButton.className =
+                "delete";
+
+            deleteButton.title =
+                "Delete";
+
+            deleteButton.onclick =
+                () => deletePhoto(
+                    index
+                );
+
+
+            actions.appendChild(
+                leftButton
+            );
+
+            actions.appendChild(
+                rotateButton
+            );
+
+            actions.appendChild(
+                rightButton
+            );
+
+            actions.appendChild(
+                deleteButton
+            );
+
+
+            card.appendChild(
+                number
+            );
+
+            card.appendChild(
+                img
+            );
+
+            card.appendChild(
+                actions
+            );
+
+
+            photoGrid.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
 
@@ -213,11 +361,20 @@ function renderPhotos() {
 
 function rotatePhoto(index) {
 
-    photos[index].rotation += 90;
+    photos[index].rotation +=
+        90;
 
-    if (photos[index].rotation >= 360) {
-        photos[index].rotation = 0;
+
+    if (
+        photos[index].rotation >=
+        360
+    ) {
+
+        photos[index].rotation =
+            0;
+
     }
+
 
     renderPhotos();
 
@@ -230,7 +387,15 @@ function rotatePhoto(index) {
 
 function deletePhoto(index) {
 
-    photos.splice(index, 1);
+    photos.splice(
+        index,
+        1
+    );
+
+    generatedPDF = null;
+
+    savePDF.disabled =
+        true;
 
     renderPhotos();
 
@@ -241,22 +406,42 @@ function deletePhoto(index) {
    MOVE PHOTO
 ========================= */
 
-function movePhoto(index, direction) {
+function movePhoto(
+    index,
+    direction
+) {
 
-    const newIndex = index + direction;
+    const newIndex =
+        index + direction;
+
 
     if (
         newIndex < 0 ||
         newIndex >= photos.length
     ) {
+
         return;
+
     }
 
-    const temp = photos[index];
 
-    photos[index] = photos[newIndex];
+    const temp =
+        photos[index];
 
-    photos[newIndex] = temp;
+
+    photos[index] =
+        photos[newIndex];
+
+
+    photos[newIndex] =
+        temp;
+
+
+    generatedPDF = null;
+
+    savePDF.disabled =
+        true;
+
 
     renderPhotos();
 
@@ -267,228 +452,541 @@ function movePhoto(index, direction) {
    CLEAR ALL
 ========================= */
 
-clearAll.addEventListener("click", function () {
+clearAll.addEventListener(
+    "click",
+    function () {
 
-    if (photos.length === 0) {
-        return;
+        if (
+            photos.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        photos = [];
+
+        generatedPDF = null;
+
+        savePDF.disabled =
+            true;
+
+
+        renderPhotos();
+
     }
-
-    photos = [];
-
-    renderPhotos();
-
-});
+);
 
 
 /* =========================
    GENERATE PDF
 ========================= */
 
-generatePDF.addEventListener("click", async function () {
+generatePDF.addEventListener(
+    "click",
+    async function () {
 
-    if (photos.length === 0) {
-        return;
-    }
+        if (
+            photos.length === 0
+        ) {
 
-
-    generatePDF.disabled = true;
-
-    generatePDF.innerHTML =
-        "⏳ Creating PDF...";
-
-
-    try {
-
-        const { jsPDF } = window.jspdf;
-
-
-        let format = "a4";
-
-        if (pageSize.value === "letter") {
-            format = "letter";
-        }
-
-
-        let pdf;
-
-
-        if (pageSize.value === "original") {
-
-            const firstImage =
-                await loadImage(photos[0].src);
-
-            const width =
-                firstImage.naturalWidth * 0.264583;
-
-            const height =
-                firstImage.naturalHeight * 0.264583;
-
-            pdf = new jsPDF({
-                orientation:
-                    width > height
-                        ? "landscape"
-                        : "portrait",
-
-                unit: "mm",
-
-                format: [
-                    width,
-                    height
-                ]
-            });
-
-        } else {
-
-            pdf = new jsPDF({
-                orientation:
-                    orientation.value,
-
-                unit: "mm",
-
-                format: format
-            });
+            return;
 
         }
 
 
-        for (let i = 0; i < photos.length; i++) {
+        generatePDF.disabled =
+            true;
 
-            if (i > 0) {
 
-                if (pageSize.value === "original") {
+        generatePDF.innerHTML =
+            "⏳ Creating PDF...";
 
-                    const img =
-                        await loadImage(
-                            photos[i].src
-                        );
 
-                    const width =
-                        img.naturalWidth * 0.264583;
+        try {
 
-                    const height =
-                        img.naturalHeight * 0.264583;
+            const {
+                jsPDF
+            } = window.jspdf;
 
-                    pdf.addPage(
-                        [width, height],
-                        width > height
-                            ? "landscape"
-                            : "portrait"
-                    );
 
-                } else {
+            let format =
+                "a4";
 
-                    pdf.addPage();
 
-                }
+            if (
+                pageSize.value ===
+                "letter"
+            ) {
+
+                format =
+                    "letter";
 
             }
 
 
-            const img =
-                await loadImage(
-                    photos[i].src
-                );
+            let pdf;
 
 
-            let pageWidth =
-                pdf.internal.pageSize.getWidth();
+            /* ORIGINAL SIZE */
 
-            let pageHeight =
-                pdf.internal.pageSize.getHeight();
+            if (
+                pageSize.value ===
+                "original"
+            ) {
 
-
-            const marginValue =
-                Number(margin.value);
-
-
-            const availableWidth =
-                pageWidth -
-                marginValue * 2;
-
-            const availableHeight =
-                pageHeight -
-                marginValue * 2;
+                const firstImage =
+                    await loadImage(
+                        photos[0].src
+                    );
 
 
-            const imageRatio =
-                img.naturalWidth /
-                img.naturalHeight;
+                const width =
+                    firstImage.naturalWidth *
+                    0.264583;
 
 
-            const pageRatio =
-                availableWidth /
-                availableHeight;
+                const height =
+                    firstImage.naturalHeight *
+                    0.264583;
 
 
-            let imageWidth;
-            let imageHeight;
+                pdf = new jsPDF({
 
+                    orientation:
+                        width > height
+                            ? "landscape"
+                            : "portrait",
 
-            if (imageRatio > pageRatio) {
+                    unit:
+                        "mm",
 
-                imageWidth =
-                    availableWidth;
+                    format: [
+                        width,
+                        height
+                    ]
 
-                imageHeight =
-                    imageWidth /
-                    imageRatio;
+                });
+
 
             } else {
 
-                imageHeight =
-                    availableHeight;
+                pdf = new jsPDF({
 
-                imageWidth =
-                    imageHeight *
-                    imageRatio;
+                    orientation:
+                        orientation.value,
+
+                    unit:
+                        "mm",
+
+                    format:
+                        format
+
+                });
 
             }
 
 
-            const x =
-                (pageWidth - imageWidth) / 2;
+            /* ADD EACH PHOTO */
 
-            const y =
-                (pageHeight - imageHeight) / 2;
+            for (
+                let i = 0;
+                i < photos.length;
+                i++
+            ) {
+
+                if (i > 0) {
+
+                    if (
+                        pageSize.value ===
+                        "original"
+                    ) {
+
+                        const img =
+                            await loadImage(
+                                photos[i].src
+                            );
 
 
-            pdf.addImage(
-                photos[i].src,
-                "JPEG",
-                x,
-                y,
-                imageWidth,
-                imageHeight,
-                undefined,
-                "FAST",
-                photos[i].rotation
+                        const width =
+                            img.naturalWidth *
+                            0.264583;
+
+
+                        const height =
+                            img.naturalHeight *
+                            0.264583;
+
+
+                        pdf.addPage(
+
+                            [width, height],
+
+                            width > height
+                                ? "landscape"
+                                : "portrait"
+
+                        );
+
+
+                    } else {
+
+                        pdf.addPage();
+
+                    }
+
+                }
+
+
+                const img =
+                    await loadImage(
+                        photos[i].src
+                    );
+
+
+                const pageWidth =
+                    pdf.internal.pageSize
+                        .getWidth();
+
+
+                const pageHeight =
+                    pdf.internal.pageSize
+                        .getHeight();
+
+
+                const marginValue =
+                    Number(
+                        margin.value
+                    );
+
+
+                const availableWidth =
+                    pageWidth -
+                    marginValue * 2;
+
+
+                const availableHeight =
+                    pageHeight -
+                    marginValue * 2;
+
+
+                const imageRatio =
+                    img.naturalWidth /
+                    img.naturalHeight;
+
+
+                const pageRatio =
+                    availableWidth /
+                    availableHeight;
+
+
+                let imageWidth;
+
+                let imageHeight;
+
+
+                if (
+                    imageRatio >
+                    pageRatio
+                ) {
+
+                    imageWidth =
+                        availableWidth;
+
+
+                    imageHeight =
+                        imageWidth /
+                        imageRatio;
+
+
+                } else {
+
+                    imageHeight =
+                        availableHeight;
+
+
+                    imageWidth =
+                        imageHeight *
+                        imageRatio;
+
+                }
+
+
+                const x =
+                    (
+                        pageWidth -
+                        imageWidth
+                    ) / 2;
+
+
+                const y =
+                    (
+                        pageHeight -
+                        imageHeight
+                    ) / 2;
+
+
+                pdf.addImage(
+
+                    photos[i].src,
+
+                    "JPEG",
+
+                    x,
+
+                    y,
+
+                    imageWidth,
+
+                    imageHeight,
+
+                    undefined,
+
+                    "FAST",
+
+                    photos[i].rotation
+
+                );
+
+            }
+
+
+            /* SAVE PDF OBJECT */
+
+            generatedPDF =
+                pdf;
+
+
+            savePDF.disabled =
+                false;
+
+
+            generatePDF.innerHTML =
+                "✅ PDF Ready";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            alert(
+                "Something went wrong while creating the PDF."
+            );
+
+
+            generatePDF.innerHTML =
+                "📄 Generate PDF";
+
+        }
+
+
+        generatePDF.disabled =
+            false;
+
+    }
+);
+
+
+/* =========================
+   SAVE TO FILE
+========================= */
+
+savePDF.addEventListener(
+    "click",
+    async function () {
+
+        if (!generatedPDF) {
+
+            alert(
+                "Please generate the PDF first."
+            );
+
+            return;
+
+        }
+
+
+        /* GET FILE NAME */
+
+        let name =
+            fileName.value.trim();
+
+
+        if (!name) {
+
+            name =
+                "photos-to-pdf";
+
+        }
+
+
+        /*
+         * Remove invalid Windows
+         * filename characters
+         */
+
+        name = name.replace(
+            /[<>:"/\\|?*]/g,
+            "_"
+        );
+
+
+        /*
+         * Remove .pdf if user
+         * already typed it
+         */
+
+        name = name.replace(
+            /\.pdf$/i,
+            ""
+        );
+
+
+        name += ".pdf";
+
+
+        /* CREATE PDF BLOB */
+
+        const pdfBlob =
+            generatedPDF.output(
+                "blob"
+            );
+
+
+        /*
+         * MODERN BROWSERS
+         * Save File Picker
+         */
+
+        if (
+            "showSaveFilePicker"
+            in window
+        ) {
+
+            try {
+
+                const fileHandle =
+                    await window
+                        .showSaveFilePicker({
+
+                            suggestedName:
+                                name,
+
+                            types: [
+
+                                {
+
+                                    description:
+                                        "PDF File",
+
+                                    accept: {
+
+                                        "application/pdf":
+                                            [".pdf"]
+
+                                    }
+
+                                }
+
+                            ]
+
+                        });
+
+
+                const writable =
+                    await fileHandle
+                        .createWritable();
+
+
+                await writable.write(
+                    pdfBlob
+                );
+
+
+                await writable.close();
+
+
+                alert(
+                    "✅ PDF saved successfully!"
+                );
+
+
+            } catch (error) {
+
+                /*
+                 * User cancelled
+                 */
+
+                if (
+                    error.name ===
+                    "AbortError"
+                ) {
+
+                    return;
+
+                }
+
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    "Unable to save the PDF."
+                );
+
+            }
+
+
+        } else {
+
+            /*
+             * FALLBACK
+             * Normal browser download
+             */
+
+            const url =
+                URL.createObjectURL(
+                    pdfBlob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                url;
+
+
+            link.download =
+                name;
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            link.click();
+
+
+            link.remove();
+
+
+            URL.revokeObjectURL(
+                url
             );
 
         }
 
-
-        pdf.save(
-            "photos-to-pdf.pdf"
-        );
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Something went wrong while creating the PDF."
-        );
-
     }
-
-
-    generatePDF.disabled = false;
-
-    generatePDF.innerHTML =
-        "📄 Generate PDF";
-
-});
+);
 
 
 /* =========================
@@ -497,23 +995,33 @@ generatePDF.addEventListener("click", async function () {
 
 function loadImage(src) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(
+        (resolve, reject) => {
 
-        const img = new Image();
+            const img =
+                new Image();
 
-        img.onload = () =>
-            resolve(img);
 
-        img.onerror = reject;
+            img.onload =
+                () => resolve(img);
 
-        img.src = src;
 
-    });
+            img.onerror =
+                reject;
+
+
+            img.src =
+                src;
+
+        }
+    );
 
 }
 
 
-/* Initial state */
+/* =========================
+   INITIAL STATE
+========================= */
 
 renderPhotos();
 

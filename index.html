@@ -15,30 +15,36 @@
 
 <body>
 
+    <!-- HEADER -->
     <header class="header">
+
         <div class="logo">
-            <span>📄</span>
-            Photo<span>PDF</span>
+            📄 Photo<span>PDF</span>
         </div>
 
         <div class="header-text">
             Free Photo to PDF Converter
         </div>
+
     </header>
 
 
     <main class="container">
 
+        <!-- HERO -->
         <section class="hero">
+
             <h1>Convert Photos to PDF</h1>
+
             <p>
                 Upload your photos, arrange them, and create a professional PDF
                 in seconds.
             </p>
+
         </section>
 
 
-        <!-- Upload Area -->
+        <!-- UPLOAD -->
         <section class="upload-box" id="dropZone">
 
             <div class="upload-icon">
@@ -47,7 +53,9 @@
 
             <h2>Drop your photos here</h2>
 
-            <p>or choose photos from your device</p>
+            <p>
+                or choose photos from your device
+            </p>
 
             <label for="fileInput" class="upload-button">
                 Choose Photos
@@ -62,9 +70,10 @@
         </section>
 
 
-        <!-- Controls -->
+        <!-- PDF SETTINGS -->
         <section class="controls">
 
+            <!-- PAGE SIZE -->
             <div class="control-group">
 
                 <label for="pageSize">
@@ -72,14 +81,25 @@
                 </label>
 
                 <select id="pageSize">
-                    <option value="a4">A4</option>
-                    <option value="letter">Letter</option>
-                    <option value="original">Original Image Size</option>
+
+                    <option value="a4">
+                        A4
+                    </option>
+
+                    <option value="letter">
+                        Letter
+                    </option>
+
+                    <option value="original">
+                        Original Image Size
+                    </option>
+
                 </select>
 
             </div>
 
 
+            <!-- ORIENTATION -->
             <div class="control-group">
 
                 <label for="orientation">
@@ -101,6 +121,7 @@
             </div>
 
 
+            <!-- MARGIN -->
             <div class="control-group">
 
                 <label for="margin">
@@ -132,14 +153,42 @@
         </section>
 
 
-        <!-- Preview -->
+        <!-- FILE NAME -->
+        <section class="filename-section">
+
+            <label for="fileName">
+                PDF File Name
+            </label>
+
+            <div class="filename-input">
+
+                <input type="text" id="fileName" value="photos-to-pdf" placeholder="Enter PDF file name">
+
+                <span>
+                    .pdf
+                </span>
+
+            </div>
+
+            <small>
+                Choose the name you want for your PDF file.
+            </small>
+
+        </section>
+
+
+        <!-- PREVIEW -->
         <section class="preview-section">
 
             <div class="preview-header">
 
                 <h2>
                     Your Photos
-                    <span id="photoCount">0</span>
+
+                    <span id="photoCount">
+                        0
+                    </span>
+
                 </h2>
 
                 <button class="clear-button" id="clearAll">
@@ -153,7 +202,9 @@
 
                 <div class="empty-state" id="emptyState">
 
-                    <div>🖼️</div>
+                    <div>
+                        🖼️
+                    </div>
 
                     <p>
                         Your uploaded photos will appear here
@@ -166,13 +217,22 @@
         </section>
 
 
-        <!-- Generate -->
+        <!-- GENERATE / SAVE -->
         <section class="generate-section">
 
-            <button class="generate-button" id="generatePDF" disabled>
-                <span>📄</span>
-                Generate PDF
-            </button>
+            <div class="generate-buttons">
+
+                <button class="generate-button" id="generatePDF" disabled>
+                    📄 Generate PDF
+                </button>
+
+
+                <button class="save-button" id="savePDF" disabled>
+                    💾 Save to File
+                </button>
+
+            </div>
+
 
             <p class="privacy">
                 🔒 Your photos are processed locally in your browser.
@@ -183,6 +243,7 @@
     </main>
 
 
+    <!-- FOOTER -->
     <footer>
 
         <p>
