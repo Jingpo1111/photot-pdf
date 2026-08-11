@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Photo to PDF Converter</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <span>📄</span>
+            Photo<span>PDF</span>
+        </div>
+
+        <div class="header-text">
+            Free Photo to PDF Converter
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Convert Photos to PDF</h1>
+            <p>
+                Upload your photos, arrange them, and create a professional PDF
+                in seconds.
+            </p>
+        </section>
+
+
+        <!-- Upload Area -->
+        <section class="upload-box" id="dropZone">
+
+            <div class="upload-icon">
+                📸
+            </div>
+
+            <h2>Drop your photos here</h2>
+
+            <p>or choose photos from your device</p>
+
+            <label for="fileInput" class="upload-button">
+                Choose Photos
+            </label>
+
+            <input type="file" id="fileInput" accept="image/*" multiple hidden>
+
+            <small>
+                JPG, JPEG, PNG, WEBP
+            </small>
+
+        </section>
+
+
+        <!-- Controls -->
+        <section class="controls">
+
+            <div class="control-group">
+
+                <label for="pageSize">
+                    PDF Page Size
+                </label>
+
+                <select id="pageSize">
+                    <option value="a4">A4</option>
+                    <option value="letter">Letter</option>
+                    <option value="original">Original Image Size</option>
+                </select>
+
+            </div>
+
+
+            <div class="control-group">
+
+                <label for="orientation">
+                    Orientation
+                </label>
+
+                <select id="orientation">
+
+                    <option value="portrait">
+                        Portrait
+                    </option>
+
+                    <option value="landscape">
+                        Landscape
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="control-group">
+
+                <label for="margin">
+                    Margin
+                </label>
+
+                <select id="margin">
+
+                    <option value="0">
+                        No Margin
+                    </option>
+
+                    <option value="5" selected>
+                        5 mm
+                    </option>
+
+                    <option value="10">
+                        10 mm
+                    </option>
+
+                    <option value="15">
+                        15 mm
+                    </option>
+
+                </select>
+
+            </div>
+
+        </section>
+
+
+        <!-- Preview -->
+        <section class="preview-section">
+
+            <div class="preview-header">
+
+                <h2>
+                    Your Photos
+                    <span id="photoCount">0</span>
+                </h2>
+
+                <button class="clear-button" id="clearAll">
+                    Clear All
+                </button>
+
+            </div>
+
+
+            <div class="photo-grid" id="photoGrid">
+
+                <div class="empty-state" id="emptyState">
+
+                    <div>🖼️</div>
+
+                    <p>
+                        Your uploaded photos will appear here
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Generate -->
+        <section class="generate-section">
+
+            <button class="generate-button" id="generatePDF" disabled>
+                <span>📄</span>
+                Generate PDF
+            </button>
+
+            <p class="privacy">
+                🔒 Your photos are processed locally in your browser.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 PhotoPDF · Photo to PDF Converter
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
